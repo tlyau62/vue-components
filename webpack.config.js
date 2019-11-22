@@ -1,14 +1,14 @@
 const path = require('path');
-const CopyPlugin = require('copy-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-    mode: 'production',
+    mode: 'development',
     entry: './src/index.js',
     output: {
         filename: 'main.js'
     },
+    devtool: 'inline-source-map',
     plugins: [
         new HtmlWebpackPlugin({
             filename: 'index.html',
@@ -21,6 +21,10 @@ module.exports = {
             {
                 test: /\.vue$/,
                 loader: 'vue-loader'
+            },
+            {
+                test: /\.css$/,
+                use: ["vue-style-loader", "css-loader"]
             }
         ]
     },
