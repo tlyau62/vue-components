@@ -1,24 +1,16 @@
-import Vue from 'vue';
-import ContextMenu from './ContextMenu.vue';
 import $ from 'jquery';
+import ContextMenu from './ContextMenu';
 
-const menus = [];
+export default {
+    bind(el, binding, vnode) {
+        $(el).contextmenu(($evt) => {
+            ContextMenu(vnode.context, binding.value).open($evt.originalEvent);
 
-export default function (binding, configs, zIndex = 1000) {
-    const vContextMenu = Vue.extend(ContextMenu);
-    const vInstance = new vContextMenu({
-        parent: binding,
-        propsData: {
-            binding,
-            items: configs.items,
-            menus,
-            zIndex
-        }
-    });
-
-    menus.push(vInstance);
-
-    $('body').append(vInstance.$mount().$el);
-
-    return vInstance;
+            $evt.preventDefault();
+            $evt.stopPropagation();
+        });
+    },
+    unbind(el) {
+        $(el).off('contextmenu');
+    }
 }

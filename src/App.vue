@@ -1,49 +1,66 @@
 <template>
-  <div id="app" @click.right.prevent.stop="open">
-    {{message}}
-    <i class="fas fa-user"></i>
-    <i class="fab fa-accessible-icon"></i>
-  </div>
+  <!-- <div id="app" @click.right.prevent.stop="open"> -->
+  <div id="app" v-context-menu="ctxMenuConfig">{{message}}</div>
 </template>
 
 <script>
 import ContextMenu from "./components/ContextMenu";
 
 export default {
+  directives: { ContextMenu },
   data() {
     return {
-      message: "Hello Vue!"
-    };
-  },
-  methods: {
-    open($event) {
-      ContextMenu(this, {
+      message: "Hello Vue!",
+      ctxMenuConfig: {
         items: [
           {
-            name: "action1",
+            name: "New Folder",
+            icon: '<i class="fas fa-folder"></i>',
             action() {
               console.log("test");
             }
           },
           {
-            name: "action2",
+            name: "Upload Files",
+            icon: '<i class="fas fa-file-medical"></i>',
             action() {
               this.message += "hi";
             }
           },
           {
-            name: "actions setz",
-            subItems: {
+            name: "Upload Folder",
+            icon: '<i class="fas fa-folder-plus"></i>',
+            action() {
+              this.message += "hi";
+            }
+          },
+          {
+            name: "Workflow",
+            icon: '<i class="fas fa-code-branch"></i>',
+            subMenu: {
               items: [
                 {
-                  name: "subaction2",
+                  name: "Workflow 1",
+                  icon: '<i class="fas fa-code-branch"></i>',
                   action() {
                     this.message += "hello";
-                  },
-                  subItems: {
+                  }
+                },
+                {
+                  name: "Workflow 2",
+                  icon: '<i class="fas fa-code-branch"></i>',
+                  action() {
+                    this.message += "hello";
+                  }
+                },
+                {
+                  name: "Ultra Workflow",
+                  icon: '<i class="fas fa-code-branch"></i>',
+                  subMenu: {
                     items: [
                       {
-                        name: "subsubaction",
+                        name: "Ultra Workflow EX 1",
+                        icon: '<i class="fas fa-code-branch"></i>',
                         action() {
                           this.message += "zzz";
                         }
@@ -55,22 +72,13 @@ export default {
             }
           },
           {
-            name: "actions set 2",
-            subItems: {
-              items: [
-                {
-                  name: "subaction3",
-                  action() {
-                    this.message += "hello";
-                  }
-                }
-              ]
-            }
+            name: "Other actions"
           }
         ]
-      }).open($event);
-    }
-  }
+      }
+    };
+  },
+  methods: {}
 };
 </script>
 
