@@ -8,7 +8,10 @@
         @mouseover="alive && openSubMenu(item, $event)"
       >
         <span class="context-menu-icon" v-if="item.icon" v-html="item.icon"></span>
-        {{item.name}}
+        <span class="context-menu-text">{{item.name}}</span>
+        <span class="context-menu-detail" v-if="item.subMenu">
+          <i class="fas fa-chevron-right"></i>
+        </span>
       </li>
     </ul>
   </div>
@@ -84,7 +87,7 @@ export default {
         pos.x = this.$el.offsetLeft + this.$el.offsetWidth;
         pos.y = this.$el.offsetTop + $event.target.offsetTop;
 
-        ContextMenu(this.binding, item.subMenu, this.zIndex + 1).open(pos);
+        ContextMenu(this.binding, item.subMenu, this.menus, this.zIndex + 1).open(pos);
       }
     }
   },
@@ -137,6 +140,16 @@ export default {
 
 .context-menu-icon {
   display: inline-block;
-  width: 1.5rem;
+  width: 1rem;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.context-menu-text {
+  margin-left: 1rem;
+}
+
+.context-menu-detail {
+  float: right;
 }
 </style>
