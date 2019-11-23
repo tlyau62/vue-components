@@ -27,7 +27,6 @@ export default {
   data() {
     return {
       style: {
-        display: "none",
         top: 0,
         left: 0,
         "z-index": this.zIndex
@@ -39,18 +38,13 @@ export default {
     open($event) {
       this.style.top = $event.y + "px";
       this.style.left = $event.x + "px";
-      this.style.display = "inline-block";
-      this.$nextTick(() => {
-        this.$el.focus();
-        $(this.$el)
-          .find("ul")
-          .slideDown("fast");
-      });
+
+      this.$nextTick(() => this.focus());
     },
     close() {
       const menus = this.menus;
 
-      if (menus[menus.length - 1] !== this) {
+      if (!this.isFocused()) {
         // delegate the close action to current focus menu
         return;
       }
@@ -63,7 +57,25 @@ export default {
       item.action && item.action.apply(this.binding, $event);
       this.close();
     },
-    openSubMenu(item, $event) {
+    isFocused() {
+      const menus = this.menus;
+
+      return menus.length > 0 && menus[menus.length - 1] === this;
+    },
+    focus() {
+      const menus = this.menus;
+
+      while (!this.isFocused()) {
+        menus.pop().$destroy();
+      }
+
+      this.$el.focus();
+
+      $(this.$el)
+        .find("ul")
+        .slideDown("fast");
+    },
+    openSubMenu(item, event) {
       const menus = this.menus;
 
       if (
@@ -75,19 +87,20 @@ export default {
         return;
       }
 
-      while (menus.length > 0 && menus[menus.length - 1] !== this) {
-        menus.pop().$destroy();
-      }
-
-      this.$el.focus();
+      this.focus();
 
       if (item.subMenu) {
         const pos = {};
 
         pos.x = this.$el.offsetLeft + this.$el.offsetWidth;
-        pos.y = this.$el.offsetTop + $event.target.offsetTop;
+        pos.y = this.$el.offsetTop + event.target.offsetTop;
 
-        ContextMenu(this.binding, item.subMenu, this.menus, this.zIndex + 1).open(pos);
+        ContextMenu(
+          this.binding,
+          item.subMenu,
+          this.menus,
+          this.zIndex + 1
+        ).open(pos);
       }
     }
   },
