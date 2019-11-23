@@ -1,5 +1,9 @@
 <template>
-  <div id="app" @click.right.prevent.stop="open">{{message}}</div>
+  <div id="app" @click.right.prevent.stop="open">
+    {{message}}
+    <i class="fas fa-user"></i>
+    <i class="fab fa-accessible-icon"></i>
+  </div>
 </template>
 
 <script>
@@ -71,10 +75,15 @@ export default {
 </script>
 
 <style>
+/* https://chriscourses.com/blog/loading-fonts-webpack */
+/* https://fontawesome.com/how-to-use/on-the-web/setup/using-package-managers */
+@import "~@fortawesome/fontawesome-free/css/all.css";
+
 html,
 body,
 #app {
   height: 100%;
   margin: 0;
+  font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
 }
 </style>
