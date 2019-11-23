@@ -88,12 +88,12 @@ export default {
       }
     }
   },
-  beforeDestroy() {
-    this.alive = false;
-  },
   destroyed() {
     const $dom = $(this.$el);
 
+    // In 2.x we no longer remove the DOM listeners when destroying vms, since all supported browsers actually can correctly garbage-collect them.
+    // see also: https://github.com/vuejs/vue/issues/5187
+    this.alive = false;
     $dom.fadeOut("fast", () => $dom.remove());
   }
 };
