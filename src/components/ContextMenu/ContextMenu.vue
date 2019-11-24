@@ -1,18 +1,22 @@
 <template>
   <div class="context-menu" tabindex="-1" :style="style" @blur="close()">
     <ul>
-      <li
-        v-for="item in items"
-        :key="item.name"
-        @click="alive && invoke($event, item)"
-        @mouseover="alive && openSubMenu(item, $event)"
-      >
-        <span class="context-menu-icon" v-if="item.icon" v-html="item.icon"></span>
-        <span class="context-menu-text">{{item.name}}</span>
-        <span class="context-menu-detail" v-if="item.subMenu">
-          <i class="fas fa-chevron-right"></i>
-        </span>
-      </li>
+      <template v-for="item in items">
+        <li :key="item.name" v-if="item.spliter" class="context-menu-spliter"></li>
+        <li
+          :key="item.name"
+          v-else
+          @click="alive && invoke($event, item)"
+          @mouseover="alive && openSubMenu(item, $event)"
+          class="context-menu-item"
+        >
+          <span class="context-menu-item-icon" v-if="item.icon" v-html="item.icon"></span>
+          {{item.name}}
+          <span class="context-menu-item-detail" v-if="item.subMenu">
+            <i class="fas fa-chevron-right"></i>
+          </span>
+        </li>
+      </template>
     </ul>
   </div>
 </template>
@@ -141,28 +145,32 @@ export default {
   margin: 0;
 }
 
-.context-menu li {
+.context-menu-item {
   width: 250px;
   padding: 0.5rem 1.5rem;
   cursor: pointer;
 }
 
-.context-menu li:hover {
+.context-menu-item:hover {
   background-color: whitesmoke;
 }
 
-.context-menu-icon {
+.context-menu-item-icon {
   display: inline-block;
   width: 1rem;
   text-align: center;
   font-size: 1.1rem;
+  margin-right: 1rem;
 }
 
-.context-menu-text {
-  margin-left: 1rem;
-}
-
-.context-menu-detail {
+.context-menu-item-detail {
   float: right;
+}
+
+.context-menu-spliter {
+  border-bottom: 1px solid lightgray;
+  padding: 0;
+  width: 100%;
+  margin: 0.5rem 0;
 }
 </style>

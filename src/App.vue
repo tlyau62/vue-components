@@ -21,6 +21,9 @@ export default {
             }
           },
           {
+            spliter: true
+          },
+          {
             name: "Upload Files",
             icon: '<i class="fas fa-file-medical"></i>',
             action() {
@@ -33,6 +36,9 @@ export default {
             action() {
               this.message += "hi";
             }
+          },
+          {
+            spliter: true
           },
           {
             name: "Workflow",
@@ -72,7 +78,17 @@ export default {
             }
           },
           {
-            name: "Other actions"
+            name: "Other actions",
+            subMenu: {
+              items: [
+                {
+                  name: "Test",
+                  action() {
+                    this.message += "zzz";
+                  }
+                }
+              ]
+            }
           }
         ]
       }
