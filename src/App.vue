@@ -2,9 +2,10 @@
   <div id="app" class="container">
     <vuetable
       ref="vuetable"
-      :fields="['name', 'desc']"
+      :fields="fields"
       :api-mode="false"
       :data="docs"
+      :css="vueTableCss.table"
       @vuetable:cell-rightclicked="onClick"
     ></vuetable>
   </div>
@@ -13,6 +14,7 @@
 <script>
 import ContextMenu from "./components/ContextMenu";
 import Vuetable from "vuetable-2";
+import VueTableCss from "./components/VueTable/VueTableCss.js";
 
 export default {
   components: {
@@ -20,19 +22,44 @@ export default {
   },
   data() {
     return {
+      vueTableCss: VueTableCss,
       message: "Hello Vue!",
+      fields: [
+        {
+          name: "name",
+          sortField: "name"
+        },
+        {
+          name: "owner",
+          sortField: "owner"
+        },
+        {
+          name: "modified",
+          sortField: "modified"
+        },
+        {
+          name: "size",
+          sortField: "size"
+        }
+      ],
       docs: [
         {
           name: "test.doc",
-          desc: "test file"
+          owner: "a",
+          modified: "10/19/2011",
+          size: "1mb"
         },
         {
           name: "test2.doc",
-          desc: "test file 2"
+          owner: "ab",
+          modified: "10/19/2011",
+          size: "1mb"
         },
         {
           name: "test3.doc",
-          desc: "test file 3"
+          owner: "az",
+          modified: "10/19/2011",
+          size: "1mb"
         }
       ],
       ctxMenuConfig: {
