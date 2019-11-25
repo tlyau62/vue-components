@@ -1,22 +1,27 @@
 <template>
-  <div id="app" class="container">
-    <vuetable
-      ref="vuetable"
-      :fields="fields"
-      :api-mode="false"
-      :data="docs"
-      :css="vueTableCss.table"
-      :row-class="onRowClass"
-      @vuetable:cell-clicked="activate"
-      @vuetable:cell-rightclicked="onClick"
-    ></vuetable>
+  <div id="app" class="container" @click="deactivate">
+    <div class="table-responsive text-nowrap">
+      <vuetable
+        ref="vuetable"
+        :fields="fields"
+        :api-mode="false"
+        :data="docs"
+        :css="vueTableCss"
+        :row-class="onRowClass"
+        @vuetable:cell-clicked="activate"
+        @vuetable:cell-rightclicked="onClick"
+      ></vuetable>
+    </div>
   </div>
 </template>
 
 <script>
 import ContextMenu from "./components/ContextMenu";
 import Vuetable from "vuetable-2";
-import VueTableCss from "./components/VueTable/VueTableCss.js";
+import {
+  VueTableCss,
+  vueTableCtxMenu
+} from "./components/VueTable/VueTableConfig.js";
 
 export default {
   components: {
@@ -24,13 +29,16 @@ export default {
   },
   data() {
     return {
-      vueTableCss: VueTableCss,
+      vueTableCss: VueTableCss.table,
+      vueTableCtxMenu,
       message: "Hello Vue!",
       activeRow: -1,
       fields: [
         {
           name: "name",
-          sortField: "name"
+          sortField: "name",
+          titleClass: "w-100",
+          dataClass: "w-100"
         },
         {
           name: "owner",
@@ -64,89 +72,7 @@ export default {
           modified: "10/19/2011",
           size: "1mb"
         }
-      ],
-      ctxMenuConfig: {
-        items: [
-          {
-            name: "New Folder",
-            icon: '<i class="fas fa-folder"></i>',
-            action() {
-              console.log("test");
-            }
-          },
-          {
-            spliter: true
-          },
-          {
-            name: "Upload Files",
-            icon: '<i class="fas fa-file-medical"></i>',
-            action() {
-              this.message += "hi";
-            }
-          },
-          {
-            name: "Upload Folder",
-            icon: '<i class="fas fa-folder-plus"></i>',
-            action() {
-              this.message += "hi";
-            }
-          },
-          {
-            spliter: true
-          },
-          {
-            name: "Workflow",
-            icon: '<i class="fas fa-code-branch"></i>',
-            subMenu: {
-              items: [
-                {
-                  name: "Workflow 1",
-                  icon: '<i class="fas fa-code-branch"></i>',
-                  action() {
-                    this.message += "hello";
-                  }
-                },
-                {
-                  name: "Workflow 2",
-                  icon: '<i class="fas fa-code-branch"></i>',
-                  action() {
-                    this.message += "hello";
-                  }
-                },
-                {
-                  name: "Ultra Workflow",
-                  icon: '<i class="fas fa-code-branch"></i>',
-                  subMenu: {
-                    items: [
-                      {
-                        name: "Ultra Workflow EX 1",
-                        icon: '<i class="fas fa-code-branch"></i>',
-                        action() {
-                          this.message += "zzz";
-                        }
-                      }
-                    ]
-                  }
-                }
-              ]
-            }
-          },
-          {
-            name: "Other actions",
-            subMenu: {
-              items: [
-                {
-                  name: "Test",
-                  action(arg) {
-                    console.log(arg);
-                    this.message += "zzz";
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
+      ]
     };
   },
   methods: {
@@ -157,13 +83,19 @@ export default {
       event.stopPropagation();
 
       this.activate(vevt);
-      ContextMenu(this, this.ctxMenuConfig, data).open(event);
+      ContextMenu(this, this.vueTableCtxMenu, data).open(event);
     },
     onRowClass(dataItem, index) {
       return this.activeRow === index ? "table-primary" : null;
     },
     activate(vevt) {
+      vevt.event.stopPropagation();
+
       this.activeRow = vevt.index;
+      this.$refs.vuetable.refresh();
+    },
+    deactivate() {
+      this.activeRow = -1;
       this.$refs.vuetable.refresh();
     }
   }
