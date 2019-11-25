@@ -6,7 +6,7 @@
         <li
           :key="item.name"
           v-else
-          @click="alive && invoke($event, item)"
+          @click="alive && invoke(item, $event)"
           @mouseover="alive && openSubMenu(item, $event)"
           class="context-menu-item"
         >
@@ -27,7 +27,7 @@ import $ from "jquery";
 
 export default {
   name: "context-menu",
-  props: ["items", "zIndex", "menus", "binding"],
+  props: ["items", "zIndex", "menus", "binding", "selected"],
   data() {
     return {
       style: {
@@ -39,9 +39,9 @@ export default {
     };
   },
   methods: {
-    open($event) {
-      this.style.top = $event.y + "px";
-      this.style.left = $event.x + "px";
+    open(event) {
+      this.style.top = event.y + "px";
+      this.style.left = event.x + "px";
 
       this.$nextTick(() => this.focus());
     },
@@ -57,8 +57,14 @@ export default {
         menus.pop().$destroy();
       }
     },
-    invoke($event, item) {
-      item.action && item.action.apply(this.binding, $event);
+    invoke(item, event) {
+      const arg = {
+        selectedItem: this.selected,
+        hoveredItem: item,
+        event
+      };
+
+      item.action && item.action.apply(this.binding, [arg]);
       this.close();
     },
     isFocused() {
@@ -102,6 +108,7 @@ export default {
         ContextMenu(
           this.binding,
           item.subMenu,
+          this.selected,
           this.zIndex + 1,
           this.menus
         ).open(pos);

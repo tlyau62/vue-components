@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="container">
     <vuetable
       ref="vuetable"
       :fields="['name', 'desc']"
@@ -107,7 +107,8 @@ export default {
               items: [
                 {
                   name: "Test",
-                  action() {
+                  action(arg) {
+                    console.log(arg);
                     this.message += "zzz";
                   }
                 }
@@ -120,12 +121,12 @@ export default {
   },
   methods: {
     onClick(vevt) {
-      const evt = vevt.event;
+      const { event, data } = vevt;
 
-      evt.preventDefault();
-      evt.stopPropagation();
+      event.preventDefault();
+      event.stopPropagation();
 
-      ContextMenu(this, this.ctxMenuConfig).open(evt);
+      ContextMenu(this, this.ctxMenuConfig, data).open(event);
     }
   }
 };

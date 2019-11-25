@@ -2,7 +2,15 @@ import Vue from 'vue';
 import ContextMenu from './ContextMenu.vue';
 import $ from 'jquery';
 
-export default function (binding, configs, zIndex = 1000, menus = []) {
+/**
+ * 
+ * @param {*} binding binding for action
+ * @param {*} configs context menu config
+ * @param {*} selected current selected item
+ * @param {*} zIndex default zindex
+ * @param {*} menus array for holding the context menu components
+ */
+export default function (binding, configs, selected, zIndex = 1000, menus = []) {
   const vContextMenu = Vue.extend(ContextMenu);
   const vInstance = new vContextMenu({
     parent: binding,
@@ -10,7 +18,8 @@ export default function (binding, configs, zIndex = 1000, menus = []) {
       binding,
       items: configs.items,
       menus,
-      zIndex
+      zIndex,
+      selected
     }
   });
 
