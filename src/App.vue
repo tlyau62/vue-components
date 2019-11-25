@@ -1,16 +1,40 @@
 <template>
-  <!-- <div id="app" @click.right.prevent.stop="open"> -->
-  <div id="app" v-context-menu="ctxMenuConfig">{{message}}</div>
+  <div id="app">
+    <vuetable
+      ref="vuetable"
+      :fields="['name', 'desc']"
+      :api-mode="false"
+      :data="docs"
+      @vuetable:cell-rightclicked="onClick"
+    ></vuetable>
+  </div>
 </template>
 
 <script>
 import ContextMenu from "./components/ContextMenu";
+import Vuetable from "vuetable-2";
 
 export default {
-  directives: { ContextMenu },
+  components: {
+    Vuetable
+  },
   data() {
     return {
       message: "Hello Vue!",
+      docs: [
+        {
+          name: "test.doc",
+          desc: "test file"
+        },
+        {
+          name: "test2.doc",
+          desc: "test file 2"
+        },
+        {
+          name: "test3.doc",
+          desc: "test file 3"
+        }
+      ],
       ctxMenuConfig: {
         items: [
           {
@@ -94,7 +118,16 @@ export default {
       }
     };
   },
-  methods: {}
+  methods: {
+    onClick(vevt) {
+      const evt = vevt.event;
+
+      evt.preventDefault();
+      evt.stopPropagation();
+
+      ContextMenu(this, this.ctxMenuConfig).open(evt);
+    }
+  }
 };
 </script>
 
@@ -102,6 +135,7 @@ export default {
 /* https://chriscourses.com/blog/loading-fonts-webpack */
 /* https://fontawesome.com/how-to-use/on-the-web/setup/using-package-managers */
 @import "~@fortawesome/fontawesome-free/css/all.css";
+@import "~bootstrap/dist/css/bootstrap.min.css";
 
 html,
 body,

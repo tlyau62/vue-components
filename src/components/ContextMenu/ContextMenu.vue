@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import ContextMenu from "./ContextMenu";
+import ContextMenu from "./index";
 import $ from "jquery";
 
 export default {
@@ -102,8 +102,8 @@ export default {
         ContextMenu(
           this.binding,
           item.subMenu,
-          this.menus,
-          this.zIndex + 1
+          this.zIndex + 1,
+          this.menus
         ).open(pos);
       }
     }
