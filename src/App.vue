@@ -6,6 +6,8 @@
       :api-mode="false"
       :data="docs"
       :css="vueTableCss.table"
+      :row-class="onRowClass"
+      @vuetable:cell-clicked="activate"
       @vuetable:cell-rightclicked="onClick"
     ></vuetable>
   </div>
@@ -24,6 +26,7 @@ export default {
     return {
       vueTableCss: VueTableCss,
       message: "Hello Vue!",
+      activeRow: -1,
       fields: [
         {
           name: "name",
@@ -153,7 +156,15 @@ export default {
       event.preventDefault();
       event.stopPropagation();
 
+      this.activate(vevt);
       ContextMenu(this, this.ctxMenuConfig, data).open(event);
+    },
+    onRowClass(dataItem, index) {
+      return this.activeRow === index ? "table-primary" : null;
+    },
+    activate(vevt) {
+      this.activeRow = vevt.index;
+      this.$refs.vuetable.refresh();
     }
   }
 };
@@ -171,5 +182,9 @@ body,
   height: 100%;
   margin: 0;
   font-family: Roboto, RobotoDraft, Helvetica, Arial, sans-serif;
+}
+
+.selected {
+  color: blue;
 }
 </style>
